@@ -3,7 +3,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import JobCardList from "../JobCardList/JobCardList";
 import About from "../About/About";
 
-function Main() {
+function Main({ jobs, savedJobs, onSaveJob }) {
   return (
     <main className="main">
       <section className="main__hero">
@@ -23,7 +23,8 @@ function Main() {
         </div>
       </section>
 
-      <JobCardList />
+      <JobCardList jobs={jobs} savedJobs={savedJobs} onSaveJob={onSaveJob} />
+
       <About />
     </main>
   );

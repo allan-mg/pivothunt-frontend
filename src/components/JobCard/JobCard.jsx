@@ -1,6 +1,6 @@
 import "./JobCard.css";
 
-function JobCard({ job }) {
+function JobCard({ job, isSaved, onSaveJob }) {
   return (
     <article className="job-card">
       <div className="job-card__header">
@@ -10,11 +10,14 @@ function JobCard({ job }) {
         </div>
 
         <button
-          className="job-card__save-button"
+          className={`job-card__save-button ${
+            isSaved ? "job-card__save-button_active" : ""
+          }`}
           type="button"
-          aria-label="Save job"
+          aria-label={isSaved ? "Remove saved job" : "Save job"}
+          onClick={() => onSaveJob(job)}
         >
-          ♡
+          {isSaved ? "♥" : "♡"}
         </button>
       </div>
 

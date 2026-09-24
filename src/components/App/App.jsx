@@ -11,6 +11,37 @@ import Footer from "../Footer/Footer";
 function App() {
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [savedJobs, setSavedJobs] = useState([]);
+
+  const jobs = [
+    {
+      id: 1,
+      title: "Frontend Developer",
+      company: "Northstar Labs",
+      location: "Remote · United States",
+      level: "Junior",
+      description:
+        "Build modern and responsive web experiences using React and JavaScript.",
+    },
+    {
+      id: 2,
+      title: "React Developer",
+      company: "BrightPath Technologies",
+      location: "Remote",
+      level: "Mid Level",
+      description:
+        "Join a product team focused on building intuitive applications for thousands of users.",
+    },
+    {
+      id: 3,
+      title: "Full Stack Developer",
+      company: "Orbit Systems",
+      location: "Austin, TX",
+      level: "Junior",
+      description:
+        "Work across React, Node.js, and REST APIs to build scalable web products.",
+    },
+  ];
 
   function handleSignInClick() {
     setIsSignUpOpen(false);
@@ -35,13 +66,34 @@ function App() {
     evt.preventDefault();
   }
 
+  function handleSaveJob(job) {
+    const isAlreadySaved = savedJobs.some((savedJob) => savedJob.id === job.id);
+
+    if (isAlreadySaved) {
+      setSavedJobs(savedJobs.filter((savedJob) => savedJob.id !== job.id));
+    } else {
+      setSavedJobs([...savedJobs, job]);
+    }
+  }
+
   return (
     <div className="app">
       <Header onSignInClick={handleSignInClick} />
 
       <Routes>
-        <Route path="/" element={<Main />} />
-        <Route path="/saved-jobs" element={<SavedJobs />} />
+        <Route
+          path="/"
+          element={
+            <Main jobs={jobs} savedJobs={savedJobs} onSaveJob={handleSaveJob} />
+          }
+        />
+
+        <Route
+          path="/saved-jobs"
+          element={
+            <SavedJobs savedJobs={savedJobs} onSaveJob={handleSaveJob} />
+          }
+        />
       </Routes>
 
       <Footer />
