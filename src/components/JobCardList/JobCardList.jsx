@@ -1,5 +1,6 @@
 import "./JobCardList.css";
 import JobCard from "../JobCard/JobCard";
+import NoResults from "../NoResults/NoResults";
 
 function JobCardList({ jobs, savedJobs, onSaveJob }) {
   return (
@@ -10,22 +11,26 @@ function JobCardList({ jobs, savedJobs, onSaveJob }) {
           <p className="job-list__count">{jobs.length} jobs found</p>
         </div>
 
-        <div className="job-list__grid">
-          {jobs.map((job) => {
-            const isSaved = savedJobs.some(
-              (savedJob) => savedJob.id === job.id,
-            );
+        {jobs.length === 0 ? (
+          <NoResults />
+        ) : (
+          <div className="job-list__grid">
+            {jobs.map((job) => {
+              const isSaved = savedJobs.some(
+                (savedJob) => savedJob.id === job.id,
+              );
 
-            return (
-              <JobCard
-                key={job.id}
-                job={job}
-                isSaved={isSaved}
-                onSaveJob={onSaveJob}
-              />
-            );
-          })}
-        </div>
+              return (
+                <JobCard
+                  key={job.id}
+                  job={job}
+                  isSaved={isSaved}
+                  onSaveJob={onSaveJob}
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

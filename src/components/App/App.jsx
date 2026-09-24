@@ -13,6 +13,8 @@ function App() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
   const [savedJobs, setSavedJobs] = useState([]);
 
+  const [searchQuery, setSearchQuery] = useState("");
+
   const jobs = [
     {
       id: 1,
@@ -76,6 +78,20 @@ function App() {
     }
   }
 
+  function handleSearch(query) {
+    setSearchQuery(query);
+  }
+
+  const filteredJobs = jobs.filter((job) => {
+    const query = searchQuery.toLowerCase();
+
+    return (
+      job.title.toLowerCase().includes(query) ||
+      job.company.toLowerCase().includes(query) ||
+      job.location.toLowerCase().includes(query)
+    );
+  });
+
   return (
     <div className="app">
       <Header onSignInClick={handleSignInClick} />
@@ -84,7 +100,12 @@ function App() {
         <Route
           path="/"
           element={
-            <Main jobs={jobs} savedJobs={savedJobs} onSaveJob={handleSaveJob} />
+            <Main
+              jobs={filteredJobs}
+              savedJobs={savedJobs}
+              onSaveJob={handleSaveJob}
+              onSearch={handleSearch}
+            />
           }
         />
 

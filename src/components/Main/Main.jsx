@@ -3,7 +3,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import JobCardList from "../JobCardList/JobCardList";
 import About from "../About/About";
 
-function Main({ jobs, savedJobs, onSaveJob }) {
+function Main({ jobs, savedJobs, onSaveJob, onSearch }) {
   return (
     <main className="main">
       <section className="main__hero">
@@ -19,7 +19,7 @@ function Main({ jobs, savedJobs, onSaveJob }) {
             that match your goals.
           </p>
 
-          <SearchForm />
+          <SearchForm onSearch={onSearch} />
         </div>
       </section>
 
