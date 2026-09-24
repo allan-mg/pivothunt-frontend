@@ -1,7 +1,53 @@
+@font-face {
+  font-family: "Inter";
+  src: url("./vendor/fonts/inter-400-regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./vendor/fonts/inter-500.woff") format("woff");
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto Slab";
+  src: url("./vendor/fonts/roboto-slab-700.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+}
+
+:root {
+  --color-primary: #171a2b;
+  --color-accent: #5b5fef;
+  --color-accent-soft: #eef0ff;
+  --color-background: #f7f8fc;
+  --color-surface: #ffffff;
+  --color-text: #202433;
+  --color-muted: #6f7485;
+  --color-border: #e5e7ef;
+  --color-success: #2e9d68;
+  --color-error: #ef4444;
+
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 18px;
+}
+
 * {
   box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: "Inter", Arial, sans-serif;
+}
+
+button,
+input {
+  font: inherit;
 }

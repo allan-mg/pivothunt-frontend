@@ -1,0 +1,57 @@
+.job-list {
+  padding: 72px 24px;
+  background-color: #ffffff;
+}
+
+.job-list__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.job-list__header {
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.job-list__title {
+  margin: 0;
+  color: var(--color-primary);
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: 32px;
+}
+
+.job-list__count {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 15px;
+}
+
+.job-list__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media screen and (max-width: 900px) {
+  .job-list__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .job-list {
+    padding: 48px 16px;
+  }
+
+  .job-list__header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .job-list__grid {
+    grid-template-columns: 1fr;
+  }
+}

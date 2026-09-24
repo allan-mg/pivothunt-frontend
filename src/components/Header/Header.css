@@ -1,0 +1,36 @@
+.header {
+  width: 100%;
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.header__logo-image {
+  display: block;
+  width: 190px;
+  height: auto;
+}
+
+@media screen and (max-width: 600px) {
+  .header__container {
+    padding: 16px;
+  }
+
+  .header__logo-image {
+    width: 150px;
+  }
+}
