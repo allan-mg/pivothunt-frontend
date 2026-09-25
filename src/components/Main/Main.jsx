@@ -3,7 +3,7 @@ import SearchForm from "../SearchForm/SearchForm";
 import JobCardList from "../JobCardList/JobCardList";
 import About from "../About/About";
 
-function Main({ jobs, savedJobs, onSaveJob, onSearch }) {
+function Main({ jobs, savedJobs, onSaveJob, onSearch, isLoading, apiError }) {
   return (
     <main className="main">
       <section className="main__hero">
@@ -23,8 +23,13 @@ function Main({ jobs, savedJobs, onSaveJob, onSearch }) {
         </div>
       </section>
 
-      <JobCardList jobs={jobs} savedJobs={savedJobs} onSaveJob={onSaveJob} />
-
+      <JobCardList
+        jobs={jobs}
+        savedJobs={savedJobs}
+        onSaveJob={onSaveJob}
+        isLoading={isLoading}
+        apiError={apiError}
+      />
       <About />
     </main>
   );

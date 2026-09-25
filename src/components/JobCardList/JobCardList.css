@@ -55,3 +55,33 @@
     grid-template-columns: 1fr;
   }
 }
+
+.job-list__error {
+  margin: 0;
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--color-error);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.job-list__show-more {
+  display: block;
+  margin: 36px auto 0;
+  padding: 14px 28px;
+  border: none;
+  border-radius: var(--radius-medium);
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.job-list__show-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(91, 95, 239, 0.25);
+}

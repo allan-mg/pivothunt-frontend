@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import "./JobCard.css";
 
 function JobCard({ job, isSaved, onSaveJob }) {
@@ -28,9 +29,9 @@ function JobCard({ job, isSaved, onSaveJob }) {
 
       <p className="job-card__description">{job.description}</p>
 
-      <button className="job-card__details-button" type="button">
+      <Link className="job-card__details-button" to={`/jobs/${job.id}`}>
         View details
-      </button>
+      </Link>
     </article>
   );
 }
