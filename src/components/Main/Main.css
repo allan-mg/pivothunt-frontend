@@ -33,3 +33,27 @@
   line-height: 1.6;
   color: var(--color-muted);
 }
+
+@media screen and (max-width: 600px) {
+  .main__hero {
+    padding: 64px 16px 56px;
+  }
+
+  .main__eyebrow {
+    font-size: 12px;
+  }
+
+  .main__title {
+    max-width: 100%;
+    font-size: 40px;
+    line-height: 1.08;
+    overflow-wrap: break-word;
+  }
+
+  .main__subtitle {
+    max-width: 100%;
+    margin: 20px auto 28px;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}

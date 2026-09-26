@@ -29,6 +29,22 @@ import MyApplications from "../MyApplications/MyApplications";
 import JobDetails from "../JobDetails/JobDetails";
 import Footer from "../Footer/Footer";
 
+function getInitialJobs() {
+  const storedJobs = localStorage.getItem("pivothuntJobs");
+
+  if (!storedJobs) {
+    return [];
+  }
+
+  try {
+    return JSON.parse(storedJobs);
+  } catch (err) {
+    console.error("Could not read saved jobs data:", err);
+    localStorage.removeItem("pivothuntJobs");
+    return [];
+  }
+}
+
 function App() {
   const navigate = useNavigate();
 
@@ -55,31 +71,16 @@ function App() {
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
 
   // JOBS
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState(getInitialJobs);
   const [savedJobs, setSavedJobs] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(
+    () => getInitialJobs().length === 0,
+  );
   const [apiError, setApiError] = useState("");
 
   // LOAD JOBS FROM THE MUSE
   useEffect(() => {
-    const storedJobs = localStorage.getItem("pivothuntJobs");
-
-    if (storedJobs) {
-      try {
-        const parsedJobs = JSON.parse(storedJobs);
-
-        setJobs(parsedJobs);
-        setIsLoading(false);
-      } catch (err) {
-        console.error("Could not read saved jobs data:", err);
-        localStorage.removeItem("pivothuntJobs");
-      }
-    }
-
-    setIsLoading(true);
-    setApiError("");
-
     getMultipleJobPages(5)
       .then((jobsData) => {
         const formattedJobs = jobsData.map((job) => ({
@@ -137,7 +138,6 @@ function App() {
     const token = localStorage.getItem("jwt");
 
     if (!token || !isLoggedIn) {
-      setSavedJobs([]);
       return;
     }
 
@@ -328,6 +328,7 @@ function App() {
               onSearch={handleSearch}
               isLoading={isLoading}
               apiError={apiError}
+              isLoggedIn={isLoggedIn}
             />
           }
         />

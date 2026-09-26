@@ -115,3 +115,42 @@
   background-color: var(--color-accent);
   color: var(--color-surface);
 }
+
+.job-card__save-wrapper {
+  position: relative;
+}
+
+.job-card__save-button_disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.job-card__save-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  max-width: 180px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background-color: #1f2333;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.job-card__save-wrapper:hover .job-card__save-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}

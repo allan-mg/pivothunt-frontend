@@ -10,7 +10,9 @@ import {
 
 function MyApplications() {
   const [applications, setApplications] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() =>
+    Boolean(localStorage.getItem("jwt")),
+  );
   const [applicationsError, setApplicationsError] = useState("");
   const [editingApplicationId, setEditingApplicationId] = useState(null);
   const [editingNotes, setEditingNotes] = useState("");
@@ -19,7 +21,6 @@ function MyApplications() {
     const token = localStorage.getItem("jwt");
 
     if (!token) {
-      setIsLoading(false);
       return;
     }
 
@@ -174,9 +175,6 @@ function MyApplications() {
 
                 <p className="applications__location">{application.location}</p>
 
-                {application.notes && (
-                  <p className="applications__notes">{application.notes}</p>
-                )}
                 {editingApplicationId === application._id ? (
                   <div className="applications__notes-editor">
                     <textarea

@@ -19,12 +19,10 @@ function JobDetails({ isLoggedIn }) {
   const [isApplying, setIsApplying] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    setApiError("");
-
     getJobById(jobId)
       .then((data) => {
         setJob(data);
+        setApiError("");
       })
       .catch((err) => {
         console.error(err);

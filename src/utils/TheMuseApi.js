@@ -7,7 +7,7 @@ function checkResponse(res) {
     return res.json();
   }
 
-  return Promise.reject(`Error: ${res.status}`);
+  return Promise.reject(new Error(`Request failed with status ${res.status}`));
 }
 
 export function getJobs(page = 0) {
