@@ -1,14 +1,24 @@
 import "./App.css";
+
 import { Routes, Route, useNavigate } from "react-router-dom";
-import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 import { useEffect, useState } from "react";
+
+import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+
 import { getMultipleJobPages } from "../../utils/TheMuseApi";
+
 import {
   signIn,
   signUp,
   getCurrentUser,
   updateProfile,
 } from "../../utils/AuthApi";
+
+import {
+  getSavedJobs,
+  saveJob,
+  deleteSavedJob,
+} from "../../utils/SavedJobsApi";
 
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Header from "../Header/Header";
@@ -21,42 +31,37 @@ import Footer from "../Footer/Footer";
 
 function App() {
   const navigate = useNavigate();
+
+  // SIGN IN
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
   const [authError, setAuthError] = useState("");
 
+  // AUTH
   const [isLoggedIn, setIsLoggedIn] = useState(
     Boolean(localStorage.getItem("jwt")),
   );
 
+  const [currentUser, setCurrentUser] = useState(null);
+
+  // SIGN UP
   const [signUpName, setSignUpName] = useState("");
   const [signUpEmail, setSignUpEmail] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpError, setSignUpError] = useState("");
 
+  // MODALS
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [savedJobs, setSavedJobs] = useState(() => {
-    const storedSavedJobs = localStorage.getItem("pivothuntSavedJobs");
 
-    if (!storedSavedJobs) {
-      return [];
-    }
-
-    try {
-      return JSON.parse(storedSavedJobs);
-    } catch (err) {
-      console.error("Could not read saved jobs:", err);
-      return [];
-    }
-  });
-
-  const [searchQuery, setSearchQuery] = useState("");
+  // JOBS
   const [jobs, setJobs] = useState([]);
+  const [savedJobs, setSavedJobs] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [apiError, setApiError] = useState("");
 
+  // LOAD JOBS FROM THE MUSE
   useEffect(() => {
     const storedJobs = localStorage.getItem("pivothuntJobs");
 
@@ -105,10 +110,7 @@ function App() {
       });
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("pivothuntSavedJobs", JSON.stringify(savedJobs));
-  }, [savedJobs]);
-
+  // RESTORE CURRENT USER FROM JWT
   useEffect(() => {
     const token = localStorage.getItem("jwt");
 
@@ -129,6 +131,36 @@ function App() {
         setIsLoggedIn(false);
       });
   }, []);
+
+  // LOAD SAVED JOBS FROM MONGODB
+  useEffect(() => {
+    const token = localStorage.getItem("jwt");
+
+    if (!token || !isLoggedIn) {
+      setSavedJobs([]);
+      return;
+    }
+
+    getSavedJobs(token)
+      .then((savedJobsData) => {
+        const formattedSavedJobs = savedJobsData.map((savedJob) => ({
+          id: savedJob.jobId,
+          _id: savedJob._id,
+          jobId: savedJob.jobId,
+          title: savedJob.title,
+          company: savedJob.company,
+          location: savedJob.location,
+          level: savedJob.level,
+          description: savedJob.description,
+          url: savedJob.url,
+        }));
+
+        setSavedJobs(formattedSavedJobs);
+      })
+      .catch((err) => {
+        console.error("Could not load saved jobs:", err);
+      });
+  }, [isLoggedIn]);
 
   function handleSignInClick() {
     setIsSignUpOpen(false);
@@ -194,8 +226,11 @@ function App() {
 
   function handleLogout() {
     localStorage.removeItem("jwt");
+
     setCurrentUser(null);
+    setSavedJobs([]);
     setIsLoggedIn(false);
+
     navigate("/");
   }
 
@@ -205,26 +240,58 @@ function App() {
     return updateProfile(token, profileData)
       .then((updatedUser) => {
         setCurrentUser(updatedUser);
+
         return updatedUser;
       })
       .catch((err) => {
         console.error("Could not update profile:", err);
+
         throw err;
       });
   }
 
   function handleSaveJob(job) {
-    setSavedJobs((currentSavedJobs) => {
-      const isAlreadySaved = currentSavedJobs.some(
-        (savedJob) => savedJob.id === job.id,
-      );
+    const token = localStorage.getItem("jwt");
 
-      if (isAlreadySaved) {
-        return currentSavedJobs.filter((savedJob) => savedJob.id !== job.id);
-      }
+    if (!token) {
+      return;
+    }
 
-      return [...currentSavedJobs, job];
-    });
+    const existingSavedJob = savedJobs.find(
+      (savedJob) => String(savedJob.id || savedJob.jobId) === String(job.id),
+    );
+
+    // REMOVE SAVED JOB
+    if (existingSavedJob) {
+      return deleteSavedJob(token, job.id)
+        .then(() => {
+          setSavedJobs((currentSavedJobs) =>
+            currentSavedJobs.filter(
+              (savedJob) =>
+                String(savedJob.id || savedJob.jobId) !== String(job.id),
+            ),
+          );
+        })
+        .catch((err) => {
+          console.error("Could not delete saved job:", err);
+        });
+    }
+
+    // SAVE JOB
+    return saveJob(token, job)
+      .then((savedJob) => {
+        setSavedJobs((currentSavedJobs) => [
+          ...currentSavedJobs,
+          {
+            ...job,
+            _id: savedJob._id,
+            jobId: savedJob.jobId,
+          },
+        ]);
+      })
+      .catch((err) => {
+        console.error("Could not save job:", err);
+      });
   }
 
   function handleSearch(query) {
@@ -284,6 +351,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/jobs/:jobId"
           element={<JobDetails isLoggedIn={isLoggedIn} />}
