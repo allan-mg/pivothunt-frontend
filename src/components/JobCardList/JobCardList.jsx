@@ -1,16 +1,19 @@
 import "./JobCardList.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import JobCard from "../JobCard/JobCard";
 import NoResults from "../NoResults/NoResults";
 import Preloader from "../Preloader/Preloader";
 
-function JobCardList({ jobs, savedJobs, onSaveJob, isLoading, apiError }) {
+function JobCardList({
+  jobs,
+  savedJobs,
+  onSaveJob,
+  isLoading,
+  apiError,
+  isLoggedIn,
+}) {
   const [visibleJobs, setVisibleJobs] = useState(3);
-
-  useEffect(() => {
-    setVisibleJobs(3);
-  }, [jobs]);
 
   function handleShowMore() {
     setVisibleJobs((current) => current + 3);
@@ -23,6 +26,7 @@ function JobCardList({ jobs, savedJobs, onSaveJob, isLoading, apiError }) {
       <div className="job-list__container">
         <div className="job-list__header">
           <h2 className="job-list__title">Explore opportunities</h2>
+
           <p className="job-list__count">{jobs.length} jobs found</p>
         </div>
 
@@ -37,7 +41,7 @@ function JobCardList({ jobs, savedJobs, onSaveJob, isLoading, apiError }) {
             <div className="job-list__grid">
               {jobsToShow.map((job) => {
                 const isSaved = savedJobs.some(
-                  (savedJob) => savedJob.id === job.id,
+                  (savedJob) => String(savedJob.id) === String(job.id),
                 );
 
                 return (
@@ -46,6 +50,7 @@ function JobCardList({ jobs, savedJobs, onSaveJob, isLoading, apiError }) {
                     job={job}
                     isSaved={isSaved}
                     onSaveJob={onSaveJob}
+                    isLoggedIn={isLoggedIn}
                   />
                 );
               })}

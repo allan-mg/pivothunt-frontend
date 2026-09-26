@@ -1,11 +1,15 @@
 import "./Profile.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-function Profile({ currentUser, onUpdateProfile }) {
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+
+function Profile({ onUpdateProfile }) {
+  const currentUser = useContext(CurrentUserContext);
+
   const [isEditing, setIsEditing] = useState(false);
-  const [headline, setHeadline] = useState(currentUser?.headline || "");
-  const [location, setLocation] = useState(currentUser?.location || "");
-  const [skills, setSkills] = useState(currentUser?.skills?.join(", ") || "");
+  const [headline, setHeadline] = useState("");
+  const [location, setLocation] = useState("");
+  const [skills, setSkills] = useState("");
   const [profileError, setProfileError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
 

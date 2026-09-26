@@ -62,3 +62,14 @@
     width: 100%;
   }
 }
+
+.search-form__wrapper {
+  width: 100%;
+}
+
+.search-form__error {
+  margin: 8px 0 0;
+  color: #ff4d4f;
+  font-size: 14px;
+  line-height: 1.4;
+}

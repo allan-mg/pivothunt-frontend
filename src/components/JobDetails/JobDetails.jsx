@@ -19,12 +19,10 @@ function JobDetails({ isLoggedIn }) {
   const [isApplying, setIsApplying] = useState(false);
 
   useEffect(() => {
-    setIsLoading(true);
-    setApiError("");
-
     getJobById(jobId)
       .then((data) => {
         setJob(data);
+        setApiError("");
       })
       .catch((err) => {
         console.error(err);
@@ -66,12 +64,10 @@ function JobDetails({ isLoggedIn }) {
     createApplication(token, applicationData)
       .then(() => {
         setApplicationSuccess("Application saved successfully in PivotHunt!");
-
         setNotes("");
       })
       .catch((err) => {
         console.error(err);
-
         setApplicationError(err.message || String(err));
       })
       .finally(() => {
