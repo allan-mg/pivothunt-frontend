@@ -3,7 +3,7 @@ import Navigation from "../Navigation/Navigation";
 import { Link } from "react-router-dom";
 import logo from "../../images/pivothunt-logo.png";
 
-function Header({ onSignInClick }) {
+function Header({ onSignInClick, isLoggedIn, onLogout }) {
   return (
     <header className="header">
       <div className="header__container">
@@ -11,7 +11,11 @@ function Header({ onSignInClick }) {
           <img className="header__logo-image" src={logo} alt="PivotHunt" />
         </Link>
 
-        <Navigation onSignInClick={onSignInClick} />
+        <Navigation
+          onSignInClick={onSignInClick}
+          isLoggedIn={isLoggedIn}
+          onLogout={onLogout}
+        />
       </div>
     </header>
   );
