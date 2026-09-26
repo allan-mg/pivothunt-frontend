@@ -263,12 +263,11 @@ function App() {
 
     // REMOVE SAVED JOB
     if (existingSavedJob) {
-      return deleteSavedJob(token, job.id)
+      return deleteSavedJob(token, existingSavedJob._id)
         .then(() => {
           setSavedJobs((currentSavedJobs) =>
             currentSavedJobs.filter(
-              (savedJob) =>
-                String(savedJob.id || savedJob.jobId) !== String(job.id),
+              (savedJob) => savedJob._id !== existingSavedJob._id,
             ),
           );
         })

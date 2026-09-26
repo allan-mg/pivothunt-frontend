@@ -38,8 +38,8 @@ export function saveJob(token, job) {
   }).then(checkResponse);
 }
 
-export function deleteSavedJob(token, jobId) {
-  return fetch(`${BASE_URL}/saved-jobs/${jobId}`, {
+export function deleteSavedJob(token, savedJobId) {
+  return fetch(`${BASE_URL}/saved-jobs/${savedJobId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
