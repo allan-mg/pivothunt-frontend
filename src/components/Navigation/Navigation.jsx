@@ -26,6 +26,15 @@ function Navigation({ onSignInClick, isLoggedIn, onLogout }) {
         <>
           <NavLink
             className={({ isActive }) =>
+              `navigation__link ${isActive ? "navigation__link_active" : ""}`
+            }
+            to="/applications"
+          >
+            My Applications
+          </NavLink>
+
+          <NavLink
+            className={({ isActive }) =>
               `navigation__button ${
                 isActive ? "navigation__button_active" : ""
               }`

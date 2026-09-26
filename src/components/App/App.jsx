@@ -15,6 +15,7 @@ import Header from "../Header/Header";
 import Main from "../Main/Main";
 import Profile from "../Profile/Profile";
 import SavedJobs from "../SavedJobs/SavedJobs";
+import MyApplications from "../MyApplications/MyApplications";
 import JobDetails from "../JobDetails/JobDetails";
 import Footer from "../Footer/Footer";
 
@@ -283,7 +284,19 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/jobs/:jobId" element={<JobDetails />} />
+        <Route
+          path="/jobs/:jobId"
+          element={<JobDetails isLoggedIn={isLoggedIn} />}
+        />
+
+        <Route
+          path="/applications"
+          element={
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <MyApplications />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       <Footer />
