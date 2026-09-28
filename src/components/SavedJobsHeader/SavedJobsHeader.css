@@ -1,0 +1,53 @@
+.saved-jobs-header {
+  padding: 72px 24px 48px;
+  background:
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(91, 95, 239, 0.08),
+      transparent 28%
+    ),
+    var(--color-background);
+}
+
+.saved-jobs-header__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.saved-jobs-header__eyebrow {
+  margin: 0 0 14px;
+  color: var(--color-accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.saved-jobs-header__title {
+  margin: 0;
+  color: var(--color-primary);
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: 42px;
+  line-height: 1.2;
+}
+
+.saved-jobs-header__subtitle {
+  max-width: 620px;
+  margin: 16px 0 0;
+  color: var(--color-muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+@media screen and (max-width: 600px) {
+  .saved-jobs-header {
+    padding: 48px 16px 32px;
+  }
+
+  .saved-jobs-header__title {
+    font-size: 34px;
+  }
+
+  .saved-jobs__content {
+    padding: 40px 16px 64px;
+  }
+}

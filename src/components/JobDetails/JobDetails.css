@@ -1,0 +1,201 @@
+.job-details {
+  min-height: 70vh;
+  padding: 64px 24px 88px;
+  background-color: var(--color-background);
+}
+
+.job-details__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.job-details__back {
+  display: inline-block;
+  margin-bottom: 32px;
+  color: var(--color-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.job-details__back:hover {
+  text-decoration: underline;
+}
+
+.job-details__header {
+  margin-bottom: 40px;
+}
+
+.job-details__company {
+  margin: 0 0 10px;
+  color: var(--color-accent);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.job-details__title {
+  margin: 0;
+  color: var(--color-primary);
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: 46px;
+  line-height: 1.15;
+}
+
+.job-details__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.job-details__tag {
+  padding: 8px 12px;
+  border-radius: 999px;
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 14px;
+}
+
+.job-details__description {
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.job-details__description h2,
+.job-details__description h3 {
+  color: var(--color-primary);
+  font-family: "Roboto Slab", Georgia, serif;
+}
+
+.job-details__apply-button {
+  display: inline-block;
+  margin-top: 32px;
+  padding: 14px 24px;
+  border-radius: var(--radius-medium);
+  background: linear-gradient(135deg, var(--color-accent), #7377ff);
+  color: var(--color-surface);
+  text-decoration: none;
+  font-weight: 700;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.job-details__apply-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(91, 95, 239, 0.25);
+}
+
+.job-details__error {
+  padding: 80px 24px;
+  color: var(--color-error);
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .job-details {
+    padding: 40px 16px 64px;
+  }
+
+  .job-details__title {
+    font-size: 34px;
+  }
+}
+
+.job-details__application {
+  margin-top: 40px;
+  padding: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background-color: var(--color-surface);
+}
+
+.job-details__application-title {
+  margin: 0 0 20px;
+  font-family: "Roboto Slab", serif;
+  font-size: 24px;
+  color: var(--color-text);
+}
+
+.job-details__application-form {
+  display: grid;
+  gap: 18px;
+}
+
+.job-details__application-label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.job-details__application-textarea {
+  min-height: 120px;
+  padding: 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  resize: vertical;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  color: var(--color-text);
+  background-color: var(--color-surface);
+  outline: none;
+}
+
+.job-details__application-textarea:focus {
+  border-color: var(--color-accent);
+}
+
+.job-details__application-error {
+  margin: 0;
+  color: var(--color-error);
+  font-size: 14px;
+}
+
+.job-details__application-success {
+  margin: 0;
+  color: #22863a;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.job-details__signin-message {
+  margin: 0;
+  color: var(--color-muted);
+}
+
+.job-details__apply-button {
+  width: fit-content;
+  padding: 12px 22px;
+  border: none;
+  border-radius: var(--radius-small);
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.job-details__apply-button:hover {
+  opacity: 0.9;
+}
+
+.job-details__apply-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.job-details__external-button {
+  display: inline-flex;
+  margin-top: 18px;
+  color: var(--color-accent);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.job-details__external-button:hover {
+  text-decoration: underline;
+}

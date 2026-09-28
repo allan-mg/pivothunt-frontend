@@ -1,0 +1,39 @@
+.saved-jobs {
+  min-height: 70vh;
+  background-color: var(--color-background);
+}
+
+.saved-jobs__content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 24px 88px;
+}
+
+.saved-jobs__empty {
+  margin: 0;
+  padding: 64px 24px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-large);
+  background-color: var(--color-surface);
+  color: var(--color-muted);
+  text-align: center;
+  font-size: 16px;
+}
+
+.saved-jobs__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media screen and (max-width: 900px) {
+  .saved-jobs__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .saved-jobs__grid {
+    grid-template-columns: 1fr;
+  }
+}

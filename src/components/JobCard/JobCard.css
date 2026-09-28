@@ -1,0 +1,156 @@
+.job-card {
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-large);
+  background-color: var(--color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 0 6px 18px rgba(23, 26, 43, 0.05);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.job-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(91, 95, 239, 0.35);
+  box-shadow: 0 14px 30px rgba(23, 26, 43, 0.1);
+}
+
+.job-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.job-card__company {
+  margin: 0 0 8px;
+  color: var(--color-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.job-card__title {
+  margin: 0;
+  color: var(--color-primary);
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: 22px;
+  line-height: 1.3;
+}
+
+.job-card__save-button {
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  font-size: 20px;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.job-card__save-button:hover {
+  transform: scale(1.06);
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
+.job-card__details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.job-card__location,
+.job-card__level {
+  padding: 7px 11px;
+  border-radius: 999px;
+  background-color: var(--color-accent-soft);
+  color: var(--color-accent);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.job-card__description {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.job-card__details-button {
+  margin-top: auto;
+  align-self: flex-start;
+  padding: 11px 18px;
+  border: none;
+  border-radius: var(--radius-small);
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.job-card__details-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(23, 26, 43, 0.14);
+}
+
+.job-card__save-button_active {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-surface);
+}
+
+.job-card__save-wrapper {
+  position: relative;
+}
+
+.job-card__save-button_disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.job-card__save-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: max-content;
+  max-width: 180px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background-color: #1f2333;
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.3;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    visibility 0.2s ease;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.job-card__save-wrapper:hover .job-card__save-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
