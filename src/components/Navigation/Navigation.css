@@ -93,3 +93,22 @@
   background-color: var(--color-accent-soft);
   color: var(--color-accent);
 }
+
+@media screen and (max-width: 600px) {
+  .navigation {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px 14px;
+  }
+
+  .navigation__link {
+    font-size: 13px;
+  }
+
+  .navigation__button,
+  .navigation__logout-button {
+    padding: 9px 14px;
+    font-size: 13px;
+  }
+}
