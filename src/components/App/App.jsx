@@ -84,6 +84,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(
     () => getInitialJobs().length === 0,
   );
+  const [savedJobsError, setSavedJobsError] = useState("");
   const [apiError, setApiError] = useState("");
 
   // LOAD JOBS FROM THE MUSE
@@ -347,8 +348,11 @@ function App() {
     const token = localStorage.getItem("jwt");
 
     if (!token) {
+      setSavedJobsError("Please sign in to save jobs.");
       return;
     }
+
+    setSavedJobsError("");
 
     const existingSavedJob = savedJobs.find(
       (savedJob) => String(savedJob.id || savedJob.jobId) === String(job.id),
@@ -363,9 +367,15 @@ function App() {
               (savedJob) => savedJob._id !== existingSavedJob._id,
             ),
           );
+
+          setSavedJobsError("");
         })
         .catch((err) => {
           console.error("Could not delete saved job:", err);
+
+          setSavedJobsError(
+            "We couldn't remove this job from your saved jobs. Please try again.",
+          );
         });
     }
 
@@ -380,9 +390,13 @@ function App() {
             jobId: savedJob.jobId,
           },
         ]);
+
+        setSavedJobsError("");
       })
       .catch((err) => {
         console.error("Could not save job:", err);
+
+        setSavedJobsError("We couldn't save this job. Please try again.");
       });
   }
 
@@ -428,6 +442,21 @@ function App() {
           onLogout={handleLogout}
         />
 
+        {savedJobsError && (
+          <div className="app__saved-jobs-error" role="alert">
+            <span>{savedJobsError}</span>
+
+            <button
+              className="app__saved-jobs-error-close"
+              type="button"
+              aria-label="Dismiss error"
+              onClick={() => setSavedJobsError("")}
+            >
+              ×
+            </button>
+          </div>
+        )}
+
         <Routes>
           <Route
             path="/"
@@ -440,6 +469,7 @@ function App() {
                 isLoading={isLoading}
                 apiError={apiError}
                 isLoggedIn={isLoggedIn}
+                onSignInRequired={handleSignInClick}
               />
             }
           />
@@ -451,7 +481,11 @@ function App() {
                 isLoggedIn={isLoggedIn}
                 onSignInRequired={handleSignInClick}
               >
-                <SavedJobs savedJobs={savedJobs} onSaveJob={handleSaveJob} />
+                <SavedJobs
+                  savedJobs={savedJobs}
+                  onSaveJob={handleSaveJob}
+                  isLoggedIn={isLoggedIn}
+                />
               </ProtectedRoute>
             }
           />

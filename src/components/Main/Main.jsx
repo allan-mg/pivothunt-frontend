@@ -11,6 +11,7 @@ function Main({
   isLoading,
   apiError,
   isLoggedIn,
+  onSignInRequired,
 }) {
   return (
     <main className="main">
@@ -38,6 +39,7 @@ function Main({
         isLoading={isLoading}
         apiError={apiError}
         isLoggedIn={isLoggedIn}
+        onSignInRequired={onSignInRequired}
       />
 
       <About />
