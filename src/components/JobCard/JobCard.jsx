@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import "./JobCard.css";
 
-function JobCard({ job, isSaved, onSaveJob, isLoggedIn }) {
+function JobCard({ job, isSaved, onSaveJob, isLoggedIn, onSignInRequired }) {
   function handleSaveClick() {
     if (!isLoggedIn) {
+      onSignInRequired();
       return;
     }
 
@@ -29,10 +30,9 @@ function JobCard({ job, isSaved, onSaveJob, isLoggedIn }) {
           <button
             className={`job-card__save-button ${
               isSaved ? "job-card__save-button_active" : ""
-            } ${!isLoggedIn ? "job-card__save-button_disabled" : ""}`}
+            } ${!isLoggedIn ? "job-card__save-button_guest" : ""}`}
             type="button"
             aria-label={saveButtonLabel}
-            aria-disabled={!isLoggedIn}
             onClick={handleSaveClick}
           >
             {isSaved ? "♥" : "♡"}

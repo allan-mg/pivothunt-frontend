@@ -12,6 +12,7 @@ function JobCardList({
   isLoading,
   apiError,
   isLoggedIn,
+  onSignInRequired,
 }) {
   const [visibleJobs, setVisibleJobs] = useState(3);
 
@@ -51,6 +52,7 @@ function JobCardList({
                     isSaved={isSaved}
                     onSaveJob={onSaveJob}
                     isLoggedIn={isLoggedIn}
+                    onSignInRequired={onSignInRequired}
                   />
                 );
               })}

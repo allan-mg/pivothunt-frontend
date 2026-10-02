@@ -13,17 +13,17 @@ function Navigation({ onSignInClick, isLoggedIn, onLogout }) {
         Home
       </NavLink>
 
-      <NavLink
-        className={({ isActive }) =>
-          `navigation__link ${isActive ? "navigation__link_active" : ""}`
-        }
-        to="/saved-jobs"
-      >
-        Saved Jobs
-      </NavLink>
-
       {isLoggedIn ? (
         <>
+          <NavLink
+            className={({ isActive }) =>
+              `navigation__link ${isActive ? "navigation__link_active" : ""}`
+            }
+            to="/saved-jobs"
+          >
+            Saved Jobs
+          </NavLink>
+
           <NavLink
             className={({ isActive }) =>
               `navigation__link ${isActive ? "navigation__link_active" : ""}`

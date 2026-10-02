@@ -8,6 +8,7 @@ function ModalWithForm({
   buttonText,
   children,
   onSubmit,
+  isValid = true,
 }) {
   useEffect(() => {
     if (!isOpen) {
@@ -47,10 +48,14 @@ function ModalWithForm({
 
         <h2 className="modal__title">{title}</h2>
 
-        <form className="modal__form" onSubmit={onSubmit}>
+        <form className="modal__form" onSubmit={onSubmit} noValidate>
           {children}
 
-          <button className="modal__submit-button" type="submit">
+          <button
+            className="modal__submit-button"
+            type="submit"
+            disabled={!isValid}
+          >
             {buttonText}
           </button>
         </form>

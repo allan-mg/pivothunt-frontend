@@ -120,9 +120,9 @@
   position: relative;
 }
 
-.job-card__save-button_disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
+.job-card__save-button_guest {
+  cursor: pointer;
+  opacity: 0.65;
 }
 
 .job-card__save-tooltip {

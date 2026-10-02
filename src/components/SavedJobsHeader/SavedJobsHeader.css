@@ -51,3 +51,28 @@
     padding: 40px 16px 64px;
   }
 }
+
+.saved-jobs-header__summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 14px 18px;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.saved-jobs-header__count {
+  color: var(--color-accent);
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.saved-jobs-header__label {
+  color: var(--color-primary);
+  font-size: 15px;
+  font-weight: 600;
+}

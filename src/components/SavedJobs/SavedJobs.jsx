@@ -2,10 +2,10 @@ import "./SavedJobs.css";
 import SavedJobsHeader from "../SavedJobsHeader/SavedJobsHeader";
 import JobCard from "../JobCard/JobCard";
 
-function SavedJobs({ savedJobs, onSaveJob }) {
+function SavedJobs({ savedJobs, onSaveJob, isLoggedIn }) {
   return (
     <main className="saved-jobs">
-      <SavedJobsHeader />
+      <SavedJobsHeader savedJobsCount={savedJobs.length} />
 
       <section className="saved-jobs__content">
         {savedJobs.length === 0 ? (
@@ -18,6 +18,7 @@ function SavedJobs({ savedJobs, onSaveJob }) {
                 job={job}
                 isSaved={true}
                 onSaveJob={onSaveJob}
+                isLoggedIn={isLoggedIn}
               />
             ))}
           </div>

@@ -20,6 +20,8 @@ import {
   deleteSavedJob,
 } from "../../utils/SavedJobsApi";
 
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+
 import ModalWithForm from "../ModalWithForm/ModalWithForm";
 import Header from "../Header/Header";
 import Main from "../Main/Main";
@@ -52,6 +54,8 @@ function App() {
   const [signInEmail, setSignInEmail] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
   const [authError, setAuthError] = useState("");
+  const [signInEmailError, setSignInEmailError] = useState("");
+  const [signInPasswordError, setSignInPasswordError] = useState("");
 
   // AUTH
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -65,6 +69,9 @@ function App() {
   const [signUpEmail, setSignUpEmail] = useState("");
   const [signUpPassword, setSignUpPassword] = useState("");
   const [signUpError, setSignUpError] = useState("");
+  const [signUpNameError, setSignUpNameError] = useState("");
+  const [signUpEmailError, setSignUpEmailError] = useState("");
+  const [signUpPasswordError, setSignUpPasswordError] = useState("");
 
   // MODALS
   const [isSignInOpen, setIsSignInOpen] = useState(false);
@@ -77,6 +84,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(
     () => getInitialJobs().length === 0,
   );
+  const [savedJobsError, setSavedJobsError] = useState("");
   const [apiError, setApiError] = useState("");
 
   // LOAD JOBS FROM THE MUSE
@@ -162,6 +170,80 @@ function App() {
       });
   }, [isLoggedIn]);
 
+  function validateEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  }
+
+  function handleSignInEmailChange(evt) {
+    const { value } = evt.target;
+
+    setSignInEmail(value);
+
+    if (!value) {
+      setSignInEmailError("Email is required.");
+    } else if (!validateEmail(value)) {
+      setSignInEmailError("Please enter a valid email address.");
+    } else {
+      setSignInEmailError("");
+    }
+  }
+
+  function handleSignInPasswordChange(evt) {
+    const { value } = evt.target;
+
+    setSignInPassword(value);
+
+    if (!value) {
+      setSignInPasswordError("Password is required.");
+    } else {
+      setSignInPasswordError("");
+    }
+  }
+
+  function handleSignUpNameChange(evt) {
+    const { value } = evt.target;
+
+    setSignUpName(value);
+
+    if (!value) {
+      setSignUpNameError("Name is required.");
+    } else if (value.length < 2) {
+      setSignUpNameError("Name must contain at least 2 characters.");
+    } else if (value.length > 30) {
+      setSignUpNameError("Name cannot exceed 30 characters.");
+    } else {
+      setSignUpNameError("");
+    }
+  }
+
+  function handleSignUpEmailChange(evt) {
+    const { value } = evt.target;
+
+    setSignUpEmail(value);
+
+    if (!value) {
+      setSignUpEmailError("Email is required.");
+    } else if (!validateEmail(value)) {
+      setSignUpEmailError("Please enter a valid email address.");
+    } else {
+      setSignUpEmailError("");
+    }
+  }
+
+  function handleSignUpPasswordChange(evt) {
+    const { value } = evt.target;
+
+    setSignUpPassword(value);
+
+    if (!value) {
+      setSignUpPasswordError("Password is required.");
+    } else if (value.length < 8) {
+      setSignUpPasswordError("Password must contain at least 8 characters.");
+    } else {
+      setSignUpPasswordError("");
+    }
+  }
+
   function handleSignInClick() {
     setIsSignUpOpen(false);
     setIsSignInOpen(true);
@@ -209,13 +291,25 @@ function App() {
     setSignUpError("");
 
     signUp(signUpName, signUpEmail, signUpPassword)
-      .then(() => {
+      .then(() => signIn(signUpEmail, signUpPassword))
+      .then((data) => {
+        localStorage.setItem("jwt", data.token);
+
+        return getCurrentUser(data.token);
+      })
+      .then((userData) => {
+        setCurrentUser(userData);
+        setIsLoggedIn(true);
+
         setSignUpName("");
         setSignUpEmail("");
         setSignUpPassword("");
 
-        setIsSignUpOpen(false);
-        setIsSignInOpen(true);
+        setSignUpNameError("");
+        setSignUpEmailError("");
+        setSignUpPasswordError("");
+
+        closeAllModals();
       })
       .catch((err) => {
         console.error(err);
@@ -254,8 +348,11 @@ function App() {
     const token = localStorage.getItem("jwt");
 
     if (!token) {
+      setSavedJobsError("Please sign in to save jobs.");
       return;
     }
+
+    setSavedJobsError("");
 
     const existingSavedJob = savedJobs.find(
       (savedJob) => String(savedJob.id || savedJob.jobId) === String(job.id),
@@ -270,9 +367,15 @@ function App() {
               (savedJob) => savedJob._id !== existingSavedJob._id,
             ),
           );
+
+          setSavedJobsError("");
         })
         .catch((err) => {
           console.error("Could not delete saved job:", err);
+
+          setSavedJobsError(
+            "We couldn't remove this job from your saved jobs. Please try again.",
+          );
         });
     }
 
@@ -287,9 +390,13 @@ function App() {
             jobId: savedJob.jobId,
           },
         ]);
+
+        setSavedJobsError("");
       })
       .catch((err) => {
         console.error("Could not save job:", err);
+
+        setSavedJobsError("We couldn't save this job. Please try again.");
       });
   }
 
@@ -309,168 +416,232 @@ function App() {
     );
   });
 
+  const isSignInValid =
+    signInEmail !== "" &&
+    signInPassword !== "" &&
+    validateEmail(signInEmail) &&
+    !signInEmailError &&
+    !signInPasswordError;
+
+  const isSignUpValid =
+    signUpName.length >= 2 &&
+    signUpName.length <= 30 &&
+    signUpEmail !== "" &&
+    validateEmail(signUpEmail) &&
+    signUpPassword.length >= 8 &&
+    !signUpNameError &&
+    !signUpEmailError &&
+    !signUpPasswordError;
+
   return (
-    <div className="app">
-      <Header
-        onSignInClick={handleSignInClick}
-        isLoggedIn={isLoggedIn}
-        onLogout={handleLogout}
-      />
-
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <Main
-              jobs={filteredJobs}
-              savedJobs={savedJobs}
-              onSaveJob={handleSaveJob}
-              onSearch={handleSearch}
-              isLoading={isLoading}
-              apiError={apiError}
-              isLoggedIn={isLoggedIn}
-            />
-          }
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="app">
+        <Header
+          onSignInClick={handleSignInClick}
+          isLoggedIn={isLoggedIn}
+          onLogout={handleLogout}
         />
 
-        <Route
-          path="/saved-jobs"
-          element={
-            <SavedJobs savedJobs={savedJobs} onSaveJob={handleSaveJob} />
-          }
-        />
+        {savedJobsError && (
+          <div className="app__saved-jobs-error" role="alert">
+            <span>{savedJobsError}</span>
 
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <Profile
-                currentUser={currentUser}
-                onUpdateProfile={handleUpdateProfile}
+            <button
+              className="app__saved-jobs-error-close"
+              type="button"
+              aria-label="Dismiss error"
+              onClick={() => setSavedJobsError("")}
+            >
+              ×
+            </button>
+          </div>
+        )}
+
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <Main
+                jobs={filteredJobs}
+                savedJobs={savedJobs}
+                onSaveJob={handleSaveJob}
+                onSearch={handleSearch}
+                isLoading={isLoading}
+                apiError={apiError}
+                isLoggedIn={isLoggedIn}
+                onSignInRequired={handleSignInClick}
               />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/jobs/:jobId"
-          element={<JobDetails isLoggedIn={isLoggedIn} />}
-        />
-
-        <Route
-          path="/applications"
-          element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <MyApplications />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
-
-      <Footer />
-
-      <ModalWithForm
-        isOpen={isSignInOpen}
-        onClose={closeAllModals}
-        title="Sign in"
-        buttonText="Sign in"
-        onSubmit={handleSignInSubmit}
-      >
-        <label className="modal__label">
-          Email
-          <input
-            className="modal__input"
-            type="email"
-            placeholder="Enter your email"
-            value={signInEmail}
-            onChange={(evt) => setSignInEmail(evt.target.value)}
-            required
+            }
           />
-        </label>
 
-        <label className="modal__label">
-          Password
-          <input
-            className="modal__input"
-            type="password"
-            placeholder="Enter your password"
-            value={signInPassword}
-            onChange={(evt) => setSignInPassword(evt.target.value)}
-            required
+          <Route
+            path="/saved-jobs"
+            element={
+              <ProtectedRoute
+                isLoggedIn={isLoggedIn}
+                onSignInRequired={handleSignInClick}
+              >
+                <SavedJobs
+                  savedJobs={savedJobs}
+                  onSaveJob={handleSaveJob}
+                  isLoggedIn={isLoggedIn}
+                />
+              </ProtectedRoute>
+            }
           />
-        </label>
 
-        {authError && <p className="modal__error">{authError}</p>}
-
-        <p className="modal__switch-text">
-          New to PivotHunt?{" "}
-          <button
-            className="modal__switch-button"
-            type="button"
-            onClick={handleSignUpClick}
-          >
-            Create an account
-          </button>
-        </p>
-      </ModalWithForm>
-
-      <ModalWithForm
-        isOpen={isSignUpOpen}
-        onClose={closeAllModals}
-        title="Sign up"
-        buttonText="Create account"
-        onSubmit={handleSignUpSubmit}
-      >
-        <label className="modal__label">
-          Name
-          <input
-            className="modal__input"
-            type="text"
-            placeholder="Enter your name"
-            value={signUpName}
-            onChange={(evt) => setSignUpName(evt.target.value)}
-            required
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute
+                isLoggedIn={isLoggedIn}
+                onSignInRequired={handleSignInClick}
+              >
+                <Profile onUpdateProfile={handleUpdateProfile} />
+              </ProtectedRoute>
+            }
           />
-        </label>
 
-        <label className="modal__label">
-          Email
-          <input
-            className="modal__input"
-            type="email"
-            placeholder="Enter your email"
-            value={signUpEmail}
-            onChange={(evt) => setSignUpEmail(evt.target.value)}
-            required
+          <Route
+            path="/jobs/:jobId"
+            element={<JobDetails isLoggedIn={isLoggedIn} />}
           />
-        </label>
 
-        <label className="modal__label">
-          Password
-          <input
-            className="modal__input"
-            type="password"
-            placeholder="Create a password"
-            value={signUpPassword}
-            onChange={(evt) => setSignUpPassword(evt.target.value)}
-            required
+          <Route
+            path="/applications"
+            element={
+              <ProtectedRoute
+                isLoggedIn={isLoggedIn}
+                onSignInRequired={handleSignInClick}
+              >
+                <MyApplications />
+              </ProtectedRoute>
+            }
           />
-        </label>
+        </Routes>
 
-        {signUpError && <p className="modal__error">{signUpError}</p>}
+        <Footer />
 
-        <p className="modal__switch-text">
-          Already have an account?{" "}
-          <button
-            className="modal__switch-button"
-            type="button"
-            onClick={handleSignInClick}
-          >
-            Sign in
-          </button>
-        </p>
-      </ModalWithForm>
-    </div>
+        <ModalWithForm
+          isOpen={isSignInOpen}
+          onClose={closeAllModals}
+          title="Sign in"
+          buttonText="Sign in"
+          onSubmit={handleSignInSubmit}
+          isValid={isSignInValid}
+        >
+          <label className="modal__label">
+            Email
+            <input
+              className="modal__input"
+              type="email"
+              placeholder="Enter your email"
+              value={signInEmail}
+              onChange={handleSignInEmailChange}
+              required
+            />
+            {signInEmailError && (
+              <span className="modal__input-error">{signInEmailError}</span>
+            )}
+          </label>
+
+          <label className="modal__label">
+            Password
+            <input
+              className="modal__input"
+              type="password"
+              placeholder="Enter your password"
+              value={signInPassword}
+              onChange={handleSignInPasswordChange}
+              required
+            />
+            {signInPasswordError && (
+              <span className="modal__input-error">{signInPasswordError}</span>
+            )}
+          </label>
+
+          {authError && <p className="modal__error">{authError}</p>}
+
+          <p className="modal__switch-text">
+            New to PivotHunt?{" "}
+            <button
+              className="modal__switch-button"
+              type="button"
+              onClick={handleSignUpClick}
+            >
+              Create an account
+            </button>
+          </p>
+        </ModalWithForm>
+
+        <ModalWithForm
+          isOpen={isSignUpOpen}
+          onClose={closeAllModals}
+          title="Sign up"
+          buttonText="Create account"
+          onSubmit={handleSignUpSubmit}
+          isValid={isSignUpValid}
+        >
+          <label className="modal__label">
+            Name
+            <input
+              className="modal__input"
+              type="text"
+              placeholder="Enter your name"
+              value={signUpName}
+              onChange={handleSignUpNameChange}
+              required
+            />
+            {signUpNameError && (
+              <span className="modal__input-error">{signUpNameError}</span>
+            )}
+          </label>
+
+          <label className="modal__label">
+            Email
+            <input
+              className="modal__input"
+              type="email"
+              placeholder="Enter your email"
+              value={signUpEmail}
+              onChange={handleSignUpEmailChange}
+              required
+            />
+            {signUpEmailError && (
+              <span className="modal__input-error">{signUpEmailError}</span>
+            )}
+          </label>
+
+          <label className="modal__label">
+            Password
+            <input
+              className="modal__input"
+              type="password"
+              placeholder="Create a password"
+              value={signUpPassword}
+              onChange={handleSignUpPasswordChange}
+              required
+            />
+            {signUpPasswordError && (
+              <span className="modal__input-error">{signUpPasswordError}</span>
+            )}
+          </label>
+
+          {signUpError && <p className="modal__error">{signUpError}</p>}
+
+          <p className="modal__switch-text">
+            Already have an account?{" "}
+            <button
+              className="modal__switch-button"
+              type="button"
+              onClick={handleSignInClick}
+            >
+              Sign in
+            </button>
+          </p>
+        </ModalWithForm>
+      </div>
+    </CurrentUserContext.Provider>
   );
 }
 
