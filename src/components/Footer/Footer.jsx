@@ -1,23 +1,26 @@
+import { Link } from "react-router-dom";
 import "./Footer.css";
 
-function Footer() {
+function Footer({ isLoggedIn }) {
   return (
     <footer className="footer">
       <div className="footer__container">
         <p className="footer__copyright">© 2026 PivotHunt</p>
 
         <nav className="footer__navigation">
-          <a className="footer__link" href="/">
+          <Link className="footer__link" to="/">
             Home
-          </a>
+          </Link>
 
-          <a className="footer__link" href="/saved-jobs">
-            Saved Jobs
-          </a>
+          {isLoggedIn && (
+            <Link className="footer__link" to="/saved-jobs">
+              Saved Jobs
+            </Link>
+          )}
 
           <a
             className="footer__link"
-            href="https://github.com/"
+            href="https://github.com/allan-mg/pivothunt-frontend"
             target="_blank"
             rel="noreferrer"
           >

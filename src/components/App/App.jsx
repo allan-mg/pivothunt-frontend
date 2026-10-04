@@ -469,7 +469,7 @@ function App() {
                 isLoading={isLoading}
                 apiError={apiError}
                 isLoggedIn={isLoggedIn}
-                onSignInRequired={handleSignInClick}
+                onSignInRequired={handleSignUpClick}
               />
             }
           />
@@ -520,7 +520,7 @@ function App() {
           />
         </Routes>
 
-        <Footer />
+        <Footer isLoggedIn={isLoggedIn} />
 
         <ModalWithForm
           isOpen={isSignInOpen}
